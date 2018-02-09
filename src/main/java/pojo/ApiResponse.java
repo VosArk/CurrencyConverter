@@ -1,3 +1,5 @@
+package pojo;
+
 public class ApiResponse {
 
     private String base;
