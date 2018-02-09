@@ -1,6 +1,10 @@
 package stream;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Cache extends BaseStream {
 
@@ -12,8 +16,8 @@ public class Cache extends BaseStream {
         try {
             File file = new File(FILE_NAME);
             file.getParentFile().mkdirs();
-            writer = new FileWriter(file);
-            writer.write(inputCurr + " " + outputCurr +" " + value + "\n");
+            writer = new FileWriter(file, true);
+            writer.write(inputCurr + " " + outputCurr + " " + value + "\n");
         } catch (IOException e) {
             System.out.println("Couldn't write cache");
         } finally {
@@ -21,24 +25,25 @@ public class Cache extends BaseStream {
         }
     }
 
-    public static String readRateData() {
-        FileReader out = null;
-        BufferedReader reader = null;
-        StringBuilder fileData = null;
+    public static String readRateData(String input, String output) {
+        Scanner scanner = null;
+        ArrayList<String> words = new ArrayList<>();
         try {
-            out = new FileReader(FILE_NAME);
-            reader = new BufferedReader(out);
-            fileData = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                fileData.append(line);
+            File out = new File(FILE_NAME);
+            scanner = new Scanner(out);
+            while (scanner.hasNext()) {
+                String line = scanner.next();
+                words.add(line);
             }
         } catch (IOException e) {
             System.out.println("Cache wasn't created yet");
         } finally {
-            close(out);
-            close(reader);
+            close(scanner);
         }
-        return fileData.toString();
+        for (int i = 0; i < words.size() - 1; i++) {
+            if (words.get(i).equals(input) && words.get(i + 1).equals(output)) return words.get(i + 2);
+        }
+
+        return null;
     }
 }

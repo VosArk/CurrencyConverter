@@ -1,1 +1,2 @@
-anotherTest
+RUB EUR 0.013985
+USD EUR 0.8148

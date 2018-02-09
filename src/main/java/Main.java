@@ -15,26 +15,29 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter from currency:\n");
+        System.out.println("Enter from currency:");
         String inputCurrency = scanner.next().toUpperCase();
-        System.out.println("Enter to currency:\n");
+        System.out.println("Enter to currency:");
         String outputCurrency = scanner.next().toUpperCase();
+        String answer;
 
         if (CurrencyList.getCurrencies().contains(inputCurrency)
                 && CurrencyList.getCurrencies().contains(outputCurrency)
                 && !Objects.equals(inputCurrency, outputCurrency)) {
 
 
-            //System.out.println(Cache.readRateData());
+            answer = Cache.readRateData(inputCurrency, outputCurrency);
+            if (answer == null) {
 
-            String jsonResult = ServerConnect.getResponse(String.format(BASE_URL, inputCurrency, outputCurrency));
+                String jsonResult = ServerConnect.getResponse(String.format(BASE_URL, inputCurrency, outputCurrency));
 
-            Gson gson = new GsonBuilder().registerTypeAdapter(RateObject.class, new RatesDeserializer()).create();
-            ApiResponse apiResponse = gson.fromJson(jsonResult, ApiResponse.class);
-            String answer = apiResponse.getRates().getRate().toString();
+                Gson gson = new GsonBuilder().registerTypeAdapter(RateObject.class, new RatesDeserializer()).create();
+                ApiResponse apiResponse = gson.fromJson(jsonResult, ApiResponse.class);
+                answer = apiResponse.getRates().getRate().toString();
 
-            Cache.writeRateData(outputCurrency, inputCurrency, answer);
-            System.out.println(inputCurrency.toUpperCase() + " => " + outputCurrency.toUpperCase() + " : " + answer);
+                Cache.writeRateData(inputCurrency, outputCurrency, answer);
+            }
+            System.out.println(inputCurrency + " => " + outputCurrency + " : " + answer);
         } else {
             System.out.println("Incorrect data");
         }
