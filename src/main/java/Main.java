@@ -25,7 +25,6 @@ public class Main {
                 && CurrencyList.getCurrencies().contains(outputCurrency)
                 && !Objects.equals(inputCurrency, outputCurrency)) {
 
-
             answer = Cache.readRateData(inputCurrency, outputCurrency);
             if (answer == null) {
 
@@ -37,6 +36,7 @@ public class Main {
 
                 Cache.writeRateData(inputCurrency, outputCurrency, answer);
             }
+
             System.out.println(inputCurrency + " => " + outputCurrency + " : " + answer);
         } else {
             System.out.println("Incorrect data");

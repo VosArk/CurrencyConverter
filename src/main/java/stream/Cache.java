@@ -3,7 +3,9 @@ package stream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Cache extends BaseStream {
@@ -17,7 +19,7 @@ public class Cache extends BaseStream {
             File file = new File(FILE_NAME);
             file.getParentFile().mkdirs();
             writer = new FileWriter(file, true);
-            writer.write(inputCurr + " " + outputCurr + " " + value + "\n");
+            writer.write(inputCurr + " " + outputCurr + " " + value + " " + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "\n");
         } catch (IOException e) {
             System.out.println("Couldn't write cache");
         } finally {
@@ -40,10 +42,10 @@ public class Cache extends BaseStream {
         } finally {
             close(scanner);
         }
-        for (int i = 0; i < words.size() - 1; i++) {
-            if (words.get(i).equals(input) && words.get(i + 1).equals(output)) return words.get(i + 2);
+        for (int i = 0; i < words.size(); i += 4) {
+            if (words.get(i).equals(input) && words.get(i + 1).equals(output)
+                    && words.get(i + 3).equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) return words.get(i + 2);
         }
-
         return null;
     }
 }
